@@ -1,13 +1,139 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.header {
+    margin: 50px auto;
+    width: 100%;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.login-layout {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.logo-image {
+    background: url("./container/login/logo.png") rgb(15, 173, 246) center center no-repeat;
+    background-size: 100% auto;
+    height: 99px;
+    border-radius: 40px 10px
+}
+
+.logo {
+    background: url("./container/login/logo.png") rgb(1, 58, 88) center center no-repeat;
+    background-size: 100% auto;
+    height: 60px;
+}
+
+.trigger {
+    width: 3em;
+    height: 3em;
+    font-size: 1.5em;
+
+}
+
+.logo-title {
+    margin-top: 8px;
+
+    color: rgba(0, 0, 0, .45);
+    font-size: 18px;
+    font-family: "微软雅黑",
+        "华文细黑",
+        Avenir,
+        Helvetica Neue,
+        Arial,
+        Helvetica,
+        sans-serif;
+    height: 30px;
+    width: 100%;
+    text-align: center;
+    line-height: 30px;
+}
+
+.NavLink {
+    background-color: #001529;
+    color: #ffffff;
+    height: calc(100vh);
+}
+
+#components-layout-demo-custom-trigger .trigger {
+    font-size: 18px;
+    line-height: 64px;
+    padding: 0 24px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+#components-layout-demo-custom-trigger .trigger:hover {
+    color: #1890ff;
+}
+
+#components-layout-demo-custom-trigger .logo {
+    height: 32px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 16px;
+}
+
+.components-header {
+    /* display: inline-block; */
+    line-height: 100%;
+    height: 100%;
+    position: relative;
+    float: right;
+    padding-top: 1em;
+
+}
+
+.components-header>.components-header-search {
+    /* display: inline-block; */
+    margin-right: 1.5em;
+    /* margin-top: 0.5em; */
+    float: left;
+}
+
+.components-header>.components-header-bell {
+    /* display: inline-block; */
+    /* position: absolute; */
+    /* top: .5em; */
+    float: left;
+    padding-top: .3em;
+    margin-right: 1.5em;
+
+    /* text-align: center; */
+}
+
+.components-header>.components-header-userinfo {
+    float: left;
+    margin-right: 1.5em;
+
+}
+
+.components-header-bell-dropdown {
+    border: 1px #ec4c17fd;
+    margin-top: 2em;
+}
+
+.footer {
+    width: 100%;
+    margin: 50px 0 0 0;
+}
+
+.footer div {
+    clear: both;
+}
+
+.footer>div:first-child>span:first-child {
+    float: left;
+}
+
+.footer>div:first-child>span:last-child {
+    float: right;
+}
+
+.footer>div:last-child {
+    margin: 0 auto;
+    width: 26em;
+    text-align: justify;
+}
+
+
+
+.footer>div {
+    text-align: justify;
 }
