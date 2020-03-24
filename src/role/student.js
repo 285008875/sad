@@ -1,15 +1,11 @@
 import React, { lazy } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 const Transcript = lazy(() => import('../container/grade/student'))
 const Index = lazy(() => import('./index'));
 const Student = (props) => {
     return (
         <Index>
-
-
-            <Route exact path="/student/grade" component={Transcript}>
-                {/* <Transcript /> */}
-            </Route>
+            <Route exact path="/student/grade" component={Transcript} />
             <Route exact path="/student/schoolcircle">
 
             </Route>

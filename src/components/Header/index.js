@@ -1,33 +1,15 @@
-import React, { memo, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { Icon, Input, Badge, Button, Menu, Dropdown, Avatar } from 'antd';
+import React, { memo } from 'react';
+
+import { Icon, Input, Button, Menu, Dropdown, Avatar } from 'antd';
 const { Search } = Input;
-const getUserName = (name) => {
-    switch (name) {
-        case 'student':
-            return 'studentName';
-        case 'monitor':
 
-            return 'studentName';
-        case 'header':
-            return 'teacherName';
-        case 'teacher':
-            return 'teacherName';
-        case 'teacher':
-            return 'teacherName';
-        default:
-            break;
-    }
-
-}
 
 
 const Header = (props) => {
 
     console.log("Header")
 
-    const { roleName } = props
+    const { roleName, name } = props
 
     const UserMenu = (
         <Menu>
@@ -70,7 +52,7 @@ const Header = (props) => {
                                 style={{ marginLeft: "0.3em", verticalAlign: 'middle' }}
 
                             >
-                                {roleName === "student" || "monitor" ? props.user.studentName : props.user.teacherName}
+                                {name}
                             </Button>
                         </div>
                     </Dropdown>
@@ -80,11 +62,5 @@ const Header = (props) => {
     )
 }
 
-function mapStateToProps(state) {
-    // console.log(state);
-    return {
-        roleName: state.userInfo.Role.roleName,
-        user: state.userInfo
-    }
-}
-export default connect(mapStateToProps, null)(memo(Header))
+
+export default memo(Header)

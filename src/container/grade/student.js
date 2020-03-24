@@ -93,7 +93,7 @@ function onChange(pagination, filters, sorter, extra) {
     console.log('params', pagination, filters, sorter, extra);
 }
 const Transcript = memo((props) => {
-    console.log(123456)
+    // console.log(123456)
     useEffect(() => {
         async function fetchGrade() {
             const grade = await axios.post('./grade')

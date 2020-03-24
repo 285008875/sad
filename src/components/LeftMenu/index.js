@@ -1,44 +1,30 @@
 import React, { memo } from 'react'
 import { Menu, Icon } from 'antd';
 import { NavLink } from 'react-router-dom';
-import { connect } from 'react-redux';
-
-function areEqual(prevProps, nextProps) {
-    // console.log(prevProps, nextProps)
-    // JSON.stringify(prevProps) === JSON.stringify(nextProps)
-    // console.log(prevProps.privilegeID === nextProps.privilegeID)
-    if (prevProps.privilegeID === nextProps.privilegeID) {
-        return true
-    } else {
-        return false
-    }
-
+function isEqual(preState,nextState){
+    return true
+    
 }
-const MenuItem = memo((props) => {
-    console.log("MenuItem")
-    const { privilegeID, privilegeURL, privilegeName, icon, ...rest } = props
-    // console.log(props)
-    return (
-        <Menu.Item {...rest}>
-            <NavLink to={privilegeURL}>
-
-                <Icon type={icon} />
-                <span  >{privilegeName}</span>
-            </NavLink>
-        </Menu.Item>
-    )
-}, areEqual)
+    
 const LeftMenu = (props) => {
-    console.log("LeftMenu");
-    const { Privileges } = props.user;
+
+    console.log("LeftMenu")
+    const { Privileges } = props;
     return (
         <>
             <div className="logo" />
-            <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+            <Menu theme="dark" mode="inline" >
                 {
                     Privileges && Privileges.map((item, index) => {
+                        
+                            return < Menu.Item key={index}>
+                                <NavLink to={item.privilegeURL}>
 
-                        return <MenuItem key={item.privilegeID} {...item} />
+                                    <Icon type={item.icon} />
+                                    <span  >{item.privilegeName}</span>
+                                </NavLink>
+                            </Menu.Item>
+                        
                     })
                 }
             </Menu>
@@ -46,8 +32,6 @@ const LeftMenu = (props) => {
 
     );
 }
-function mapStateToProps(state) {
-    // console.log(state.userInfo.Role);
-    return { user: state.userInfo.Role }
-}
-export default connect(mapStateToProps, null)(memo(LeftMenu, areEqual))
+
+
+export default memo(LeftMenu,isEqual)

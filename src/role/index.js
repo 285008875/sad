@@ -1,15 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState, memo } from 'react'
 import { Layout, Icon } from 'antd';
-
+import { connect } from 'react-redux';
 
 import TopHeader from '../components/Header';
 import IFooter from '../components/Footer';
 import NavLink from '../components/LeftMenu';
 
 const { Header, Sider, Footer, Content } = Layout;
+function areEqual(prevProps, nextProps) {
 
+}
 const Index = (props) => {
-
+    // console.log(props)
+    const { roleId, ...restUserInfo } = props.data
     const [collapsed, setCollapsed] = useState(false);
     const toggle = () => {
         setCollapsed(!collapsed)
@@ -17,7 +20,7 @@ const Index = (props) => {
     return (
         <Layout>
             <Sider trigger={null} collapsible collapsed={collapsed} className="NavLink">
-                <NavLink />
+                <NavLink Privileges={roleId.privilege} />
             </Sider>
             <Layout>
                 <Header style={{ background: '#fff', padding: 0 }}>
@@ -26,11 +29,11 @@ const Index = (props) => {
                         type={collapsed ? 'menu-unfold' : 'menu-fold'}
                         onClick={() => { toggle() }}
                     />
-                    <TopHeader />
+                    <TopHeader {...restUserInfo} />
                 </Header>
                 <Content
                     style={{
-                        margin: '24px 16px',
+                        margin: '10px 10px',
                         padding: 24,
                         background: '#fff',
                         minHeight: 280,
@@ -45,10 +48,16 @@ const Index = (props) => {
         </Layout>
 
     )
-
+}
+function mapStateToProps(state) {
+    
+    return {
+        data: state.UserInfo.toJS()
+    }
 
 }
-export default Index;
+export default connect(mapStateToProps, null)(memo(Index, areEqual))
+
 
 
 

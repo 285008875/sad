@@ -13,7 +13,7 @@ const Nprogress = () => {
 
     useEffect(() => {
         ; (async () => {
-            await callFakeAPI(4000)
+            await callFakeAPI(80)
             setIsLoading(false)
         })()
         return function () {

@@ -1,12 +1,12 @@
 import axios from 'axios';
-import Nprogress from './components/nprogress/index';
+// import Nprogress from './components/nprogress/index';
 
 axios.interceptors.request.use(function (config) {
     // <Nprogress />
     // console.log(Nprogress);
 
     const token = localStorage.getItem('token');
-    console.log(token)
+    // console.log(token)
     if (token) {
         config.headers.Authorization = 'Bearer ' + token;
 
