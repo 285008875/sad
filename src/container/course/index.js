@@ -1,15 +1,33 @@
 import React, { memo, useState, useCallback, useEffect, useRef } from 'react';
-import { Table,  Modal, Button, Input, Icon, Form, Popconfirm } from 'antd';
+import { Table, Modal, Button, Input, Icon, Form, Popconfirm, Upload, Message } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { connect } from 'react-redux'
-import { setClass, modifyClass, delClass, addClass } from './store/actionCreator';
+// import { is } from 'immutable';
+import { getCourses, modifyCourses,deleteCourses,addCourses } from './store/actionCreator';
+// import axios from '../../axios.config';
 
-function ClassManager(props) {
-    console.log("class")
-    const { setClazz, classInfo, updateClazz, deleteClazz, addClazz } = props
+function isEmpty(preState, nextState) {
+    // const index = nextState.length-1
+
+    // console.log(is(preState.studentInfo[0], nextState.studentInfo[0]))
+    // while (index>=0) {
+    //     if (is(preState.studentInfo[index], nextState.studentInfo[index])==false){
+    //         return false
+    //         break
+    //     }
+    //     index--
+    // }
+
+    // return true
+
+}
+
+function CourseManager(props) {
+    console.log("student")
+    const { CourseInfo,getCourse,modifyCourse,deleteCourse,addCourses } = props
     // 保存模态框中 表单值的状态
-    const [formDate] = useState({ _id: "", className: "", marjorName: "", marjorCategory: "", departmentName: "", monitor: "" })
-    const [formClazz] = useState({ _id: "", className: "", marjorName: "", marjorCategory: "", departmentName: "", monitor: "" })
+    const [formDate] = useState({ _id: "", courseName: "", createTime: "" })
+    const [formClazz] = useState({ _id: "", courseName: "", createTime: "" ,  })
     const [searchText, setSeacrchText] = useState('')
     const [searchedColumn, setSearchedColumn] = useState('')
     let searchInput = useRef()
@@ -52,7 +70,7 @@ function ClassManager(props) {
         },
         onFilterDropdownVisibleChange: visible => {
             if (visible) {
-                setTimeout(() => searchInput.current.select());
+                setTimeout(() => searchInput.select());
             }
         },
         render: text =>
@@ -66,11 +84,11 @@ function ClassManager(props) {
             ) : (
                     text
                 ),
-    }),[])
+    }), [])
     useEffect(() => {
         try {
             //异步请求class
-            setClazz()
+            getCourse()
 
         } catch (err) {
 
@@ -79,7 +97,7 @@ function ClassManager(props) {
         return () => {
             searchInput = null
         }
-    }, [setClazz])
+    }, [getCourse])
     const handleSearch = useCallback((selectedKeys, confirm, dataIndex) => {
         confirm();
         setSeacrchText(selectedKeys[0])
@@ -91,62 +109,44 @@ function ClassManager(props) {
         setSeacrchText('')
 
     }, []);
-    //Modal 是否可见
-    // const showModal = useCallback(() => {
-    //     setVisible(true)
-    // }, [])
+
 
     // 获取Modal中 表单的值 
     const handleUpdateOk = useCallback(() => {
         formDate._id = formDate._id.state.value
-        formDate.className = formDate.className.state.value
-        formDate.marjorName = formDate.marjorName.state.value
-        formDate.marjorCategory = formDate.marjorCategory.state.value
-        formDate.departmentName = formDate.departmentName.state.value
-        formDate.monitor = formDate.monitor.state.value
-        updateClazz(formDate)
+        formDate.courseName = formDate.courseName.state.value
+        formDate.createTime = formDate.createTime.state.value
+        modifyCourse(formDate)
         Modal.destroyAll()
-    }, [formDate,updateClazz])
+    }, [modifyCourse, formDate])
     const handleAddOk = useCallback(() => {
         formClazz._id = formClazz._id.state.value
-        formClazz.className = formClazz.className.state.value
-        formClazz.marjorName = formClazz.marjorName.state.value
-        formClazz.marjorCategory = formClazz.marjorCategory.state.value
-        formClazz.departmentName = formClazz.departmentName.state.value
-        formClazz.monitor = formClazz.monitor.state.value
-        addClazz(formClazz)
+        formClazz.courseName = formClazz.courseName.state.value
+        formClazz.createTime = formClazz.createTime.state.value
+        addCourses(formClazz)
         Modal.destroyAll()
-    }, [addClazz, formClazz])
+    }, [addCourses, formClazz])
 
     const handleDelete = useCallback((key) => {
-        deleteClazz(key)
+        deleteCourse(key)
 
-    }, [deleteClazz])
+    }, [deleteCourse])
     const handleAdd = useCallback((key) => {
         const form = (
             <Form  >
                 <Form.Item >
-                    <Input addonBefore="班级编号" ref={(input) => formClazz._id = input} />
+                    <Input addonBefore="课程号" ref={(input) => formClazz._id = input} />
                 </Form.Item>
                 <Form.Item >
-                    <Input addonBefore="班级名称" ref={(input) => formClazz.className = input} />
+                    <Input addonBefore="课程名称" ref={(input) => formClazz.courseName = input} />
                 </Form.Item>
                 <Form.Item >
-                    <Input addonBefore="专业名称" ref={(input) => formClazz.marjorName = input} />
-                </Form.Item>
-                <Form.Item >
-                    <Input addonBefore="本/专科" ref={(input) => formClazz.marjorCategory = input} />
-                </Form.Item>
-                <Form.Item >
-                    <Input addonBefore="院系" ref={(input) => formClazz.departmentName = input} />
-                </Form.Item>
-                <Form.Item >
-                    <Input addonBefore="班长" ref={(input) => formClazz.monitor = input} />
+                    <Input addonBefore="创建时间" ref={(input) => formClazz.createTime = input} />
                 </Form.Item>
             </Form>
         )
         Modal.confirm({
-            title: '修改班级信息',
+            title: '添加课程信息',
             content: form,
             onOk: handleAddOk,
         })
@@ -158,34 +158,26 @@ function ClassManager(props) {
 
             <Form  >
                 <Form.Item >
-                    <Input disabled addonBefore="班级编号" ref={(input) => formDate._id = input} defaultValue={key._id} />
+                    <Input disabled addonBefore="课程号" ref={(input) => formDate._id = input} defaultValue={key._id} />
                 </Form.Item>
                 <Form.Item >
-                    <Input addonBefore="班级名称" ref={(input) => formDate.className = input} defaultValue={key.className} />
+                    <Input addonBefore="课程名称" ref={(input) => formDate.courseName = input} defaultValue={key.courseName} />
                 </Form.Item>
                 <Form.Item >
-                    <Input addonBefore="专业名称" ref={(input) => formDate.marjorName = input} defaultValue={key.marjorName} />
-                </Form.Item>
-                <Form.Item >
-                    <Input addonBefore="本/专科" ref={(input) => formDate.marjorCategory = input} defaultValue={key.marjorCategory} />
-                </Form.Item>
-                <Form.Item >
-                    <Input addonBefore="院系" ref={(input) => formDate.departmentName = input} defaultValue={key.departmentName} />
-                </Form.Item>
-                <Form.Item >
-                    <Input addonBefore="班长" ref={(input) => formDate.monitor = input} defaultValue={key.monitor} />
+                    <Input addonBefore="创建时间" ref={(input) => formDate.createTime = input} defaultValue={key.createTime} />
                 </Form.Item>
             </Form>
         )
         Modal.confirm({
-            title: '修改班级信息',
+            title: '修改课程信息',
             content: form,
             onOk: handleUpdateOk,
         })
-    }, [formDate,handleUpdateOk])
+    }, [handleUpdateOk, formDate])
+
     const columns = [
         {
-            title: '班级编号',
+            title: '课程号',
             dataIndex: '_id',
             key: '_id',
             sorter: (a, b) => a._id - b._id,
@@ -194,30 +186,15 @@ function ClassManager(props) {
             // render: text => <a>{text}</a>,
         },
         {
-            title: '班级名称',
-            dataIndex: 'className',
-            key: 'className',
+            title: '课程名称',
+            dataIndex: 'courseName',
+            key: 'courseName',
+            ...getColumnSearchProps("courseName"),
         },
         {
-            title: '专业名称',
-            dataIndex: 'marjorName',
-            key: 'marjorName',
-            ...getColumnSearchProps("marjorName"),
-        },
-        {
-            title: '本/专科',
-            dataIndex: 'marjorCategory',
-            key: 'marjorCategory',
-        },
-        {
-            title: '院系',
-            dataIndex: 'departmentName',
-            key: 'departmentName',
-        },
-        {
-            title: '班长',
-            dataIndex: 'monitor',
-            key: 'monitor',
+            title: '时间',
+            dataIndex: 'createTime',
+            key: 'createTime',
         },
         {
             title: '操作',
@@ -251,10 +228,10 @@ function ClassManager(props) {
         <>
             <Table
                 columns={columns}
-                dataSource={classInfo}
+                dataSource={CourseInfo}
                 rowKey={record => record._id}
                 size="small" tableLayout="fixed"
-                pagination={{ pageSize: 20 }}
+                pagination={{ pageSize: 100 }}
                 scroll={{ y: 370 }}
             />
             <Button type="primary" onClick={() => { handleAdd() }} style={{ position: "absolute", bottom: 70, left: 250 }}>添加</Button>
@@ -263,14 +240,14 @@ function ClassManager(props) {
 }
 function mapStateToProps(state) {
 
-    return { classInfo: state.ClassInfo.toJS() }
+    return { CourseInfo: state.CourseInfo.toJS() }
 }
 function mapDispatchToProps(dispatch) {
     return {
-        setClazz() { dispatch(setClass()) },
-        updateClazz(clazz) { dispatch(modifyClass(clazz)) },
-        deleteClazz(clazz) { dispatch(delClass(clazz)) },
-        addClazz(clazz) { dispatch(addClass(clazz)) }
+        getCourse() { dispatch(getCourses()) },
+        modifyCourse(course) { dispatch(modifyCourses(course)) },
+        deleteCourse(course) { dispatch(deleteCourses(course)) },
+        addCourses(course) { dispatch(addCourses(course)) },
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(memo(ClassManager))
+export default connect(mapStateToProps, mapDispatchToProps)(memo(CourseManager, isEmpty))

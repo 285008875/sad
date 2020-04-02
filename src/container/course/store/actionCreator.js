@@ -1,15 +1,17 @@
-import { GETCLASS, UPDATECLASS, DELETECLASS, ADDCLASS } from './constants';
+import {GETCOURSE,UPDATECOURSE,DELETECOURSE,ADDCOURSE } from './constants';
 import  axios from '../../../axios.config';
 import { message } from 'antd';
-export  function setClass(){
+export function getCourses(){
     return (dispatch)=>{
         try {
-            axios.get('./classmanage').then((res)=>{
+            axios.get('./coursemanage').then((res)=>{
 
                 // console.log(res)
                 const { result, code, succeed } = res.data
                 if (code === 200 && succeed === 1) {
-                    dispatch(getClass(result))
+                    dispatch(getCourse(result))
+                }else{
+
                 }
             })
 
@@ -19,16 +21,16 @@ export  function setClass(){
     }
     
 }
-export function modifyClass(clazz) {
-    // console.log(clazz)
+export function modifyCourses(course) {
+    // console.log(course)
     return (dispatch) => {
         try {
-            axios.post('./classmanage', clazz).then((res) => {
+            axios.post('./updatecoursemanage', course).then((res) => {
 
                 const { result, code, succeed } = res.data
 
                 if (code === 200 && succeed === 1) {
-                    dispatch(updateClass(result))
+                    dispatch(updateCourse(result))
                     message.success('信息修改成功');
 
                 }else{
@@ -41,13 +43,13 @@ export function modifyClass(clazz) {
     }
 
 }
-export function delClass(clazz) {
+export function deleteCourses(course) {
     return (dispatch) => {
         try {
-            axios.post('./delclassmanage', clazz).then((res) => {
-                const { result, code, succeed } = res.data
+            axios.post('./delcoursemanage', course).then((res) => {
+                const {  code, succeed } = res.data
                 if (code === 200 && succeed === 1) {
-                    dispatch(deleteClass(result))
+                    dispatch(deleteCourse(course))
                     message.success('信息修改成功');
                 }else{
                     message.error('信息修改失败');
@@ -59,17 +61,18 @@ export function delClass(clazz) {
     }
 
 }
-export function addClass(clazz) {
-    // console.log(clazz)
+
+export function addCourses(course) {
+    // console.log(course)
     return (dispatch) => {
         try {
-            axios.put('./classmanage', clazz).then((res) => {
+            axios.post('./addcoursemanage', course).then((res) => {
 
-                const { result, code, succeed } = res.data
+                const { code, succeed,result } = res.data
 
                 if (code === 200 && succeed === 1) {
  
-                    dispatch(insertClass(result))
+                    dispatch(insertCourse(result))
                     message.success('添加成功');
                 } else {
                     message.error('添加失败');
@@ -81,19 +84,21 @@ export function addClass(clazz) {
         }
     }
 }
-const getClass = (payload) => ({
-    type: GETCLASS,
+const getCourse = (payload) => ({
+    type: GETCOURSE,
     payload
 })
-const updateClass = (payload) => ({
-    type: UPDATECLASS,
+const updateCourse = (payload) => ({
+    type: UPDATECOURSE,
     payload
 })
-const deleteClass = (payload) => ({
-    type: DELETECLASS,
+const deleteCourse = (payload) => ({
+    type: DELETECOURSE,
     payload
 })
-const insertClass = (payload) => ({
-    type: ADDCLASS,
+const insertCourse = (payload) => ({
+    type: ADDCOURSE,
     payload
 })
+
+

@@ -6,22 +6,21 @@ import { fromJS, merge} from 'immutable';
 // const result = list.update(2, val => val.toUpperCase())
 // console.log(result)
 const initState = fromJS([{
-    _id: "2018100",
-    className: "",
-    marjorName: "",
-    marjorCategory: "",
-    departmentName: "",
-    monitor: "",
+    _id: "",
+    name: "",
+    age: "",
+    sex: "",
+    email: "",
+    tel: "",
 }])
-
-
 function reducer(state = initState, action) {
+    // console.log(action)
     switch (action.type) {
-        case constants.GETCLASS:
+        case constants.GETSTUDENT:
 
             return state.clear().merge(action.payload)
             
-        case constants.UPDATECLASS:
+        case constants.UPDATESTUDENT:
             let index = state.findIndex((item, index, array) => {
                 return item._id === action.payload._id 
             })
@@ -29,9 +28,12 @@ function reducer(state = initState, action) {
 
                 return merge(value, action.payload)
             })
-        case constants.ADDCLASS:
+        case constants.ADDSTUDENT:
             return state.merge(action.payload)
-        case constants.DELETECLASS:
+        case constants.ADDSTUDENTMANY:
+            return state.concat(action.payload)
+
+        case constants.DELETESTUDENT:
             let position = state.findIndex((item, index, array) => {
                 return item._id === action.payload._id
             })

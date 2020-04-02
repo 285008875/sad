@@ -9,6 +9,7 @@ import Nprogress from './components/nprogress/index';
 // const Index = lazy(() => import('./role/index'));
 const Student = lazy(() => import('./role/student'));
 const Admin = lazy(() => import('./role/admin'));
+const Teacher = lazy(() => import('./role/teacher'));
 function App() {
 
   return (
@@ -23,7 +24,7 @@ function App() {
               <Route path="/admin" component={Admin} />
               <Route path="/student" component={Student} />
 
-              <Route path="/teacher">
+              <Route path="/teacher" component={Teacher}>
               </Route>
               <Route exact strict path="/login" component={Login} />
               <Route exact strict path="/forget" component={Forget} />

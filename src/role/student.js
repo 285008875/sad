@@ -2,6 +2,7 @@ import React, { lazy } from 'react';
 import { Route } from 'react-router-dom';
 const Transcript = lazy(() => import('../container/grade/student'))
 const Index = lazy(() => import('./index'));
+const SetInfo = lazy(() => import('../container/userinfo'));
 const Student = (props) => {
     return (
         <Index>
@@ -9,7 +10,7 @@ const Student = (props) => {
             <Route exact path="/student/schoolcircle">
 
             </Route>
-            <Route exact path="/student/setting">
+            <Route exact path="/student/setting" component={SetInfo}>
 
             </Route>
             <Route exact path="./student/center">
