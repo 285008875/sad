@@ -7,7 +7,7 @@ const Footer = (props) => {
             <footer className="footer">
                 <div>
                     <span><a title="Ant Design Pro" href="https://pro.ant.design">Ant Design Pro</a></span>
-                    <span>学生成绩管理系统</span>
+                    <span>学生综合测评管理系统</span>
 
                 </div>
 

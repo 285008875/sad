@@ -12,7 +12,7 @@ const initState = fromJS([{
 
 }])
 function reducer(state = initState, action) {
-    console.log(action)
+    // console.log(action)
     switch (action.type) {
         case constants.GETCOURSE:
 

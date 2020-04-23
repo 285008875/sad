@@ -45,6 +45,7 @@ function ClassManager(props) {
             <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
         ),
         onFilter: (value, record) => {
+            console.log(value, record, dataIndex)
             return record[dataIndex]
                 .toString()
                 .toLowerCase()
@@ -52,7 +53,7 @@ function ClassManager(props) {
         },
         onFilterDropdownVisibleChange: visible => {
             if (visible) {
-                setTimeout(() => searchInput.current.select());
+                setTimeout(() => searchInput.select());
             }
         },
         render: text =>
@@ -218,6 +219,10 @@ function ClassManager(props) {
             title: '班长',
             dataIndex: 'monitor',
             key: 'monitor',
+            render:(text,record,index)=>{
+                // console.log(text, record, index)
+                return text
+            }
         },
         {
             title: '操作',

@@ -1,5 +1,5 @@
 import React, { memo, useState, useCallback, useEffect, useRef } from 'react';
-import { Table, Modal, Button, Input, Icon, Form, Popconfirm, Upload, Message} from 'antd';
+import { Table, Modal, Button, Input, Icon, Form, Popconfirm} from 'antd';
 import Highlighter from 'react-highlight-words';
 import { connect } from 'react-redux'
 import { getTeachers, modifyTeachers, deleteTeachers, addTeachers} from './store/actionCreator';
@@ -201,7 +201,7 @@ function TeacherManager(props) {
         },)
     }, [handleUpdateOk, formDate])
     const handleFileDownload = useCallback(()=>{
-        // console.log(111111111)
+        
         fetch('./tfiledownload',{
             method: 'GET',
             headers: {
@@ -266,7 +266,7 @@ function TeacherManager(props) {
             dataIndex: 'className',
             key: 'className',
             render: (text, record, index)=>{
-                console.log(record)
+                // console.log(record)
                 return record.classId? record.classId.className:null
             }
         },

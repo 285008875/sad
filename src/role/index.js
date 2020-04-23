@@ -13,6 +13,8 @@ function areEqual(prevProps, nextProps) {
 const Index = (props) => {
     // console.log(props)
     const { roleId, ...restUserInfo } = props.data
+    const user = Object.assign(restUserInfo, {roleName:roleId.roleName}) 
+    // console.log(user)
     const [collapsed, setCollapsed] = useState(false);
     const toggle = () => {
         setCollapsed(!collapsed)
@@ -29,7 +31,7 @@ const Index = (props) => {
                         type={collapsed ? 'menu-unfold' : 'menu-fold'}
                         onClick={() => { toggle() }}
                     />
-                    <TopHeader {...restUserInfo} />
+                    <TopHeader {...user} />
                 </Header>
                 <Content
                     style={{

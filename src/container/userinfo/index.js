@@ -1,80 +1,46 @@
-import React,{memo,useState,useCallback} from 'react'
-import {
-    Form,
-    Input,
-    Tooltip,
-    Icon,
-    Cascader,
-    Select,
-    Row,
-    Col,
-    Checkbox,
-    Button,
-    AutoComplete,
-} from 'antd';
+import React,{memo,useEffect,useLayoutEffect,useState,useCallback} from 'react'
+import { connect } from 'react-redux'
+import { Form, Input, Select, Button, Message, Divider, Tag  } from 'antd';
+import axios from '../../axios.config';
 
 const { Option } = Select;
-const AutoCompleteOption = AutoComplete.Option;
-
-const residences = [
-    {
-        value: 'zhejiang',
-        label: 'Zhejiang',
-        children: [
-            {
-                value: 'hangzhou',
-                label: 'Hangzhou',
-                children: [
-                    {
-                        value: 'xihu',
-                        label: 'West Lake',
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        value: 'jiangsu',
-        label: 'Jiangsu',
-        children: [
-            {
-                value: 'nanjing',
-                label: 'Nanjing',
-                children: [
-                    {
-                        value: 'zhonghuamen',
-                        label: 'Zhong Hua Men',
-                    },
-                ],
-            },
-        ],
-    },
-];
-
-const SetInfo =  memo((props)=> {
-    // state = {
-    //     confirmDirty: false,
-    //     autoCompleteResult: [],
-    // };
+const SetInfo =  (props)=> {
+    const { getFieldDecorator, form} = props.form;
+    const { UserInfo } = props
     const [confirmDirty, setConfirmDirty] = useState(false)
-    const [autoCompleteResult, setAutoCompleteResult] = useState([])
-    const handleSubmit = useCallback(e => {
+    const [clazz, setClazz] = useState([])
+    const handleSubmitInfo = useCallback(e => {
         e.preventDefault();
         props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
             }
+            const user = Object.assign({ _id: UserInfo._id }, values)
+            axios.post('updateuser').then((res)=>{
+                const {code,succeed} = res.data;
+                if (code = 200&&succeed===1) {
+                    Message.succeed('修改成功')
+                }
+            })
         });
     },[]);
-
+    useLayoutEffect(()=>{
+        
+        axios.get('./classname').then((res)=>{
+            const {succeed,code,result } = res.data
+            if(succeed===1&&code===200){
+                setClazz(result)
+            }
+        })
+    },[])
     const handleConfirmBlur = useCallback(e => {
         const { value } = e.target;
-        // this.setState({ confirmDirty: this.state.confirmDirty || !!value });
+        console.log(value)
         setConfirmDirty(confirmDirty || !!value)
     },[]);
 
     const compareToFirstPassword = useCallback((rule, value, callback) => {
-        const { form } = props;
+        console.log(value ,form.getFieldValue('password'))
         if (value && value !== form.getFieldValue('password')) {
             callback('Two passwords that you enter is inconsistent!');
         } else {
@@ -83,156 +49,97 @@ const SetInfo =  memo((props)=> {
     },[]);
 
     const validateToNextPassword = useCallback((rule, value, callback) => {
-        const { form } = props;
+        console.log(value ,confirmDirty)
         if (value && confirmDirty) {
             form.validateFields(['confirm'], { force: true });
         }
         callback();
     },[]);
-
-    const handleWebsiteChange = useCallback(value => {
-        let completeResult;
-        if (!value) {
-            completeResult = [];
-        } else {
-            completeResult = ['.com', '.org', '.net'].map(domain => `${value}${domain}`);
-        }
-        // this.setState({ autoCompleteResult });
-        setAutoCompleteResult(completeResult)
-    },[]);
-
-    // render() {
-        const { getFieldDecorator } = props.form;
-        // const { autoCompleteResult } = this.state;
-
-        const formItemLayout = {
-            labelCol: {
-                xs: { span: 24 },
-                sm: { span: 8 },
-            },
-            wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 16 },
-            },
-        };
-        const tailFormItemLayout = {
-            wrapperCol: {
-                xs: {
-                    span: 24,
-                    offset: 0,
-                },
-                sm: {
-                    span: 16,
-                    offset: 8,
-                },
-            },
-        };
-        const prefixSelector = getFieldDecorator('prefix', {
-            initialValue: '86',
-        })(
-            <Select style={{ width: 70 }}>
-                <Option value="86">+86</Option>
-                <Option value="87">+87</Option>
-            </Select>,
-        );
-
-        const websiteOptions = autoCompleteResult.map(website => (
-            <AutoCompleteOption key={website}>{website}</AutoCompleteOption>
-        ));
-
+    
         return (
-            <Form {...formItemLayout} onSubmit={(e)=>{handleSubmit(e)}}>
-                <Form.Item label="E-mail">
-                    {getFieldDecorator('email', {
-                        rules: [
-                            {
-                                type: 'email',
-                                message: 'The input is not valid E-mail!',
-                            },
-                            {
-                                required: true,
-                                message: 'Please input your E-mail!',
-                            },
-                        ],
-                    })(<Input />)}
-                </Form.Item>
-                <Form.Item label="Password" hasFeedback>
-                    {getFieldDecorator('password', {
-                        rules: [
-                            {
-                                required: true,
-                                message: 'Please input your password!',
-                            },
-                            {
-                                validator: validateToNextPassword,
-                            },
-                        ],
-                    })(<Input.Password />)}
-                </Form.Item>
-                <Form.Item label="Confirm Password" hasFeedback>
-                    {getFieldDecorator('confirm', {
-                        rules: [
-                            {
-                                required: true,
-                                message: 'Please confirm your password!',
-                            },
-                            {
-                                validator:compareToFirstPassword,
-                            },
-                        ],
-                    })(<Input.Password onBlur={(e)=>{handleConfirmBlur(e)}} />)}
-                </Form.Item>
-                <Form.Item
-                    label={
-                        <span>
-                            Nickname&nbsp;
-              <Tooltip title="What do you want others to call you?">
-                                <Icon type="question-circle-o" />
-                            </Tooltip>
-                        </span>
-                    }
-                >
-                    {getFieldDecorator('nickname', {
-                        rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }],
-                    })(<Input />)}
-                </Form.Item>
-                <Form.Item label="Habitual Residence">
-                    {getFieldDecorator('residence', {
-                        initialValue: ['zhejiang', 'hangzhou', 'xihu'],
-                        rules: [
-                            { type: 'array', required: true, message: 'Please select your habitual residence!' },
-                        ],
-                    })(<Cascader options={residences} />)}
-                </Form.Item>
-                <Form.Item label="Phone Number">
-                    {getFieldDecorator('phone', {
-                        rules: [{ required: true, message: 'Please input your phone number!' }],
-                    })(<Input addonBefore={prefixSelector} style={{ width: '100%' }} />)}
-                </Form.Item>
-                <Form.Item label="Website">
-                    {getFieldDecorator('website', {
-                        rules: [{ required: true, message: 'Please input website!' }],
-                    })(
-                        <AutoComplete
-                            dataSource={websiteOptions}
-                            onChange={()=>{handleWebsiteChange()}}
-                            placeholder="website"
-                        >
-                            <Input />
-                        </AutoComplete>,
-                    )}
-                </Form.Item>
+            <>  
+                <Divider orientation="left"><Tag color="#2db7f5">修改个人信息</Tag></Divider>
+                <Form layout="inline" onSubmit={(e) => { handleSubmitInfo(e)}}>
+                    <Form.Item label="姓名">
+                        {getFieldDecorator('name', {
+                            rules: [{ required: true, message: '姓名不能为空!' }],
+                        })(<Input style={{ width: '100%' }} />)}
+                    </Form.Item>
+                    <Form.Item label="手机号码">
+                        {getFieldDecorator('tel', {
+                            rules: [{ required: true, message: '手机号不能为空!' }],
+                        })(<Input style={{ width: '100%' }} />)}
+                    </Form.Item>
+                    <Form.Item label="班级">
+                        {getFieldDecorator('classId',{
+                            rules: [{ required: true, message: '手机号不能为空!' }]
+                        })(
+                            <Select
+                                showSearch
+                                style={{ width: 250 }}
+                                optionFilterProp="children"
+                                filterOption={(input, option) =>
+                                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                }
+                            >
+                                {
+                                    clazz.map((item) => {
+                                        return (
+                                            <Option key={item._id} value={item._id}>{item.className}</Option>
+                                        )
+                                    })
+                                }
 
-                <Form.Item {...tailFormItemLayout}>
-                    <Button type="primary" htmlType="submit">
-                        Register
-          </Button>
-                </Form.Item>
-            </Form>
+                            </Select>
+                        )
+
+                        }
+                        
+                    </Form.Item>
+                    
+                    <Form.Item label="邮箱">
+                        {getFieldDecorator('email', {
+                            rules: [
+                                {
+                                    type: 'email',
+                                    message: '邮箱格式有误!',
+                                },
+                                {
+                                    required: true,
+                                    message: '邮箱不能为空',
+                                },
+                            ],
+                        })(<Input />)}
+                    </Form.Item>
+                    <Form.Item label="性别">
+                        {getFieldDecorator('sex', {
+                            rules: [
+                                {
+                                    required: true,
+                                    message: '不能为空',
+                                },
+                            ],
+                        })(
+                            <Select
+                                style={{ width: 200 }}
+                            >
+                                <Option value='男'>男</Option>
+                                <Option  value='女'>女</Option>
+                                        
+                            </Select>
+                        )}
+                    </Form.Item>
+                    <Form.Item >
+                        <Button type="primary" htmlType="submit">Register</Button>
+                    </Form.Item>
+                </Form>
+            </>
         );
-    // }
-})
+}
+const WrappedForm = Form.create({ })(SetInfo);
+function mapStateToProps(state) {
 
-const WrappedForm = Form.create({ name: 'register' })(SetInfo);
+    return { UserInfo: state.UserInfo.toJS() }
+}
 
-export default WrappedForm
+export default connect(mapStateToProps, null)(memo(WrappedForm))

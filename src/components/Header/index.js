@@ -9,18 +9,18 @@ const Header = (props) => {
 
     console.log("Header")
 
-    const { roleName, name } = props
+    const { name } = props
 
     const UserMenu = (
         <Menu>
             <Menu.Item>
-                <a href={roleName + "/user"}>
+                <a href={ "./user"}>
                     <Icon type="user" /> 个人中心
                  </a>
             </Menu.Item>
             <Menu.Divider />
             <Menu.Item>
-                <a href={roleName + "/setting"}>
+                <a href={ "./setting"}>
                     <Icon type="setting" /> 个人设置
                 </a>
             </Menu.Item>

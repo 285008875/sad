@@ -39,7 +39,7 @@ class LoginForm extends Component {
                     content: '登录中...',
                     duration: 1
                 });
-                values.password = md5(values.password + values.username);
+                values.password = md5(values.password);
                 axios.post('/login', values).then((res) => {
                     const { data, token, code, msg, succeed } = res.data;
                     if (code === 200 && succeed === 1) {

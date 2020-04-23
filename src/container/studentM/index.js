@@ -121,6 +121,7 @@ function StudentManager(props) {
         formDate.sex = formDate.sex.state.value
         formDate.email = formDate.email.state.value
         formDate.tel = formDate.tel.state.value
+        console.log(formDate)
         updateStudent(formDate)
         Modal.destroyAll()
     }, [updateStudent, formDate])
